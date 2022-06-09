@@ -1,0 +1,74 @@
+.register-container {
+  background-image: url("../../../..//assets/images/pepe-sea-flipped.png");
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: #555555;
+
+  .form-section {
+    width: 40%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    margin-left: 0px;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .header {
+      font-size: 30px;
+      font-weight: 500;
+      margin-bottom: 50px;
+    }
+
+    .register-form {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .mat-form-field {
+        width: 100%;
+      }
+      ::ng-deep .mat-form-field-flex {
+        background-color: rgba(245, 247, 251, 0.5);
+      }
+
+      .register-button {
+        width: 100%;
+        height: 44px;
+        background-color: #006dd1;
+        color: white;
+        font-size: 16px;
+        border-radius: 10px;
+        margin-top: 12px;
+
+        &.mat-button-disabled {
+          background-color: grey;
+          color: #555555;
+        }
+      }
+
+      .form-fields-inline {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+      }
+    }
+
+    .register-redirect {
+      margin-top: 20px;
+      font-size: 16px;
+      display: flex;
+      gap: 5px;
+
+      .anchor {
+        color: #006dd1;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}
