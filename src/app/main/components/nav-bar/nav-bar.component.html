@@ -1,0 +1,25 @@
+<div class="top-bar">
+  <nav class="nav">
+    <button mat-button routerLink="/posts">TOP 24H</button>
+    <button mat-button routerLink="/posts">Najlepiej oceniane</button>
+    <button mat-button routerLink="/posts">Najnowsze</button>
+  </nav>
+  <ng-template #actions>
+    <button mat-button (click)="openLoginDialog()">login</button>
+    <button mat-button (click)="openRegisterDialog()">
+      register
+    </button></ng-template
+  >
+
+  <div class="user-menu" *ngIf="isLoggedIn$ | async; else actions">
+    <button mat-button [matMenuTriggerFor]="menu">
+      <span>{{ (user$ | async)?.nickname }}</span>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Wyloguj się</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

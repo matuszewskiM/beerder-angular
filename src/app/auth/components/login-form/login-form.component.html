@@ -1,35 +1,34 @@
 <div class="login-container">
-  <div class="form-section">
-    <h1 class="header">Zaloguj się</h1>
-    <form class="login-form" [formGroup]="loginForm">
-      <mat-form-field appearance="fill">
-        <mat-label>E-mail</mat-label>
-        <input
-          matInput
-          placeholder="example@example.com"
-          formControlName="email"
-        />
-        <mat-error *ngIf="!isEmailValid">Niepoprawny adres e-mail</mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Hasło</mat-label>
-        <input
-          matInput
-          placeholder="Haslo@123"
-          type="password"
-          formControlName="password"
-        />
-        <mat-error *ngIf="!isPasswordValid"
-          >Hasło musi zawierać 8-16 znaków</mat-error
-        >
-      </mat-form-field>
-      <button class="login-button" mat-button [disabled]="loginForm.invalid">
-        Zaloguj
-      </button>
-    </form>
-    <div class="register-redirect">
+  <h1 class="header">Zaloguj się</h1>
+  <form class="login-form" [formGroup]="loginForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Nickname</mat-label>
+      <input matInput placeholder="nickname" formControlName="nickname" />
+      <mat-error *ngIf="!isNicknameValid">Niepoprawny adres e-mail</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Hasło</mat-label>
+      <input
+        matInput
+        placeholder="Haslo@123"
+        type="password"
+        formControlName="password"
+      />
+      <mat-error *ngIf="!isPasswordValid"
+        >Hasło musi zawierać 8-16 znaków</mat-error
+      >
+    </mat-form-field>
+    <button
+      class="login-button"
+      mat-button
+      [disabled]="loginForm.invalid"
+      (click)="onSubmit()"
+    >
+      Zaloguj
+    </button>
+  </form>
+  <!-- <div class="register-redirect">
       <span>Nie masz konta?</span
       ><a class="anchor" routerLink="/register">Załóż je!</a>
-    </div>
-  </div>
+    </div> -->
 </div>

@@ -1,49 +1,64 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { UserStore } from '../../stores/user.store';
 import {
   NgxFileDropEntry,
   FileSystemFileEntry,
   FileSystemDirectoryEntry,
 } from 'ngx-file-drop';
 import { ToastrService } from 'ngx-toastr';
-import { MainStore } from 'src/app/main/stores/main.store';
-import { UserStore } from 'src/app/main/stores/user.store';
-
+import { MainStore } from '../../stores/main.store';
+import { Category } from '../../types/category.interface';
 @Component({
-  selector: 'app-register-form',
-  templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.scss'],
+  selector: 'app-post-form',
+  templateUrl: './post-form.component.html',
+  styleUrls: ['./post-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterFormComponent {
-  public loginForm = new FormGroup({
-    nickname: new FormControl('', [
+export class PostFormComponent implements OnInit {
+  public postForm = new FormGroup({
+    title: new FormControl('', [
       Validators.required,
       Validators.minLength(5),
-      Validators.maxLength(16),
+      Validators.maxLength(32),
     ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(16),
-    ]),
+    categories: new FormControl<Category[]>([], [Validators.required]),
   });
+
+  public categories$ = this.mainStore.categories$;
 
   public file: File | null = null;
 
   public constructor(
     private readonly toastr: ToastrService,
     private readonly matDialog: MatDialog,
-    private readonly userStore: UserStore
+    private readonly userStore: UserStore,
+    private readonly mainStore: MainStore
   ) {}
 
-  public get isNicknameValid(): boolean {
-    return this.loginForm.get('nickname')!.valid;
+  public getIsFormValid(): boolean {
+    return (
+      this.isTitleValid &&
+      this.selectedCategories?.length! > 0 &&
+      this.file !== null
+    );
   }
 
-  public get isPasswordValid(): boolean {
-    return this.loginForm.get('password')!.valid;
+  public get isTitleValid(): boolean {
+    return this.postForm.get('title')!.valid;
+  }
+
+  public get selectedCategories(): Category[] | null {
+    return this.postForm.get('categories')!.value;
+  }
+
+  public setSelectedCategories(categories: Category[] | null): void {
+    this.postForm.get('categories')!.setValue(categories);
+  }
+
+  ngOnInit(): void {
+    this.mainStore.getCategories('trigger');
   }
 
   public dropped(file: NgxFileDropEntry[]) {
@@ -104,39 +119,15 @@ export class RegisterFormComponent {
     console.log('leave');
   }
 
-  public submit(): void {
-    this.userStore.createAccount(this.preparePayload());
+  public preparePayload(): FormData {
+    const formData = new FormData();
+    formData.append('title', this.postForm.get('title')!.value!);
+    const categories = this.postForm
+      .get('categories')!
+      .value!.forEach((category: Category) =>
+        formData.append('categoryIds', `${category.id}`)
+      );
+    //formData.append('categoryIds', categories);
+    return formData;
   }
-
-  private preparePayload(): {
-    nickname: string;
-    password: string;
-    onSuccess: Function;
-  } {
-    return {
-      nickname: this.loginForm.get('nickname')!.value!,
-      password: this.loginForm.get('password')!.value!,
-      onSuccess: () => {
-        this.closeDialog(), this.openSuccessToastr();
-      },
-    };
-  }
-
-  public closeDialog(): void {
-    console.log(this.matDialog);
-    this.matDialog.closeAll();
-  }
-
-  public openSuccessToastr(): void {
-    this.toastr.success('Udało się załozyć konto');
-  }
-
-  // private preparePayload(): FormData {
-  //   const payload =
-  //   const payload = new FormData();
-  //   payload.append('nickname', this.loginForm.get('nickname')!.value!);
-  //   payload.append('password', this.loginForm.get('password')!.value!);
-  //   this.file ? payload.append('image', this.file) : null;
-  //   return payload;
-  // }
 }

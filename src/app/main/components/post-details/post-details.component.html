@@ -1,0 +1,28 @@
+<div class="details-wrapper" *ngIf="post$ | async as post">
+  <app-post [post]="post"></app-post>
+  <mat-card class="form-field-card" *ngIf="isLoggedIn$ | async">
+    <mat-form-field>
+      <input matInput [formControl]="commentBodyControl" />
+    </mat-form-field>
+    <button mat-button (click)="onSubmit()">Wyślij</button>
+  </mat-card>
+  <div class="comments-section">
+    <div class="list-wrapper">
+      <mat-card *ngFor="let comment of post.comments">
+        <div class="comment">
+          <div class="comment-top">
+            <span class="author">{{ comment.author.nickname }}</span>
+            <span class="date">{{ comment.date }}</span>
+          </div>
+          <div>
+            <mat-divider></mat-divider>
+          </div>
+          <div class="content">
+            {{ comment.body }}
+          </div>
+          <button class="upvote-btn" mat-button>+{{ comment.rating }}</button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

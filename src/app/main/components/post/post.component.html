@@ -1,0 +1,39 @@
+<div class="post-container">
+  <mat-card>
+    <div class="top-section">
+      <span class="title" (click)="navigateToPost()"> {{ post.title }} </span>
+      <div class="creation-details">
+        <span class="author">{{ post.author.nickname }}</span>
+        <span class="date">{{ post.date }}</span>
+      </div>
+    </div>
+    <div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="categories">
+      <div class="category" *ngFor="let category of post.categories">
+        #{{ category.name }}
+      </div>
+    </div>
+    <div class="image-wrapper">
+      <img class="image" [src]="post.imgPath" />
+    </div>
+    <div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="actions">
+      <button
+        mat-button
+        [disabled]="!(isLoggedIn$ | async)"
+        (click)="ratePost()"
+      >
+        +{{ post.rating }}
+      </button>
+      <button mat-button>
+        <div class="statistics" (click)="navigateToPost()">
+          <mat-icon>chat</mat-icon>{{ post.commentsCount }}
+        </div>
+      </button>
+    </div>
+  </mat-card>
+</div>
