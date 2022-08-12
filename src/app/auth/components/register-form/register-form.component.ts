@@ -131,6 +131,10 @@ export class RegisterFormComponent {
     this.toastr.success('Udało się załozyć konto');
   }
 
+  public prepaparePayload(): any {
+    return this.loginForm.value
+  }
+
   // private preparePayload(): FormData {
   //   const payload =
   //   const payload = new FormData();

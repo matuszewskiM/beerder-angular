@@ -1,8 +1,8 @@
 <div class="details-wrapper" *ngIf="post$ | async as post">
   <app-post [post]="post"></app-post>
   <mat-card class="form-field-card" *ngIf="isLoggedIn$ | async">
-    <mat-form-field>
-      <input matInput [formControl]="commentBodyControl" />
+    <mat-form-field class="comment-form-field">
+      <input matInput [formControl]="commentBodyControl" placeholder="Treść komentarza..." />
     </mat-form-field>
     <button mat-button (click)="onSubmit()">Wyślij</button>
   </mat-card>
@@ -20,7 +20,7 @@
           <div class="content">
             {{ comment.body }}
           </div>
-          <button class="upvote-btn" mat-button>+{{ comment.rating }}</button>
+          <button class="upvote-btn" (click)="rateComment(comment.id)" mat-button>+{{ comment.rating }}</button>
         </div>
       </mat-card>
     </div>

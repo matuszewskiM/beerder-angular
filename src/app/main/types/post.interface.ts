@@ -9,9 +9,10 @@ export interface Post {
     nickname: string;
   };
   date: Date;
-  imgPath: string;
+  imagePath: string;
   commentsCount: number;
   rating: number;
   categories: Category[];
   comments?: Comment[];
+  isLiked: boolean
 }

@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
 import { Category } from '../../types/category.interface';
 
@@ -14,4 +16,9 @@ import { Category } from '../../types/category.interface';
 })
 export class CategoriesComponent {
   @Input() public categories!: Category[] | null;
+  @Output() private selected = new EventEmitter<number>()
+
+  public onSelected(id: number): void {
+    this.selected.emit(id)
+  }
 }

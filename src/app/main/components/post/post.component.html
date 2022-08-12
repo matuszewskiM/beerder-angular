@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="image-wrapper">
-      <img class="image" [src]="post.imgPath" />
+      <img class="image" [src]="post.imagePath" />
     </div>
     <div>
       <mat-divider></mat-divider>
@@ -26,6 +26,7 @@
         mat-button
         [disabled]="!(isLoggedIn$ | async)"
         (click)="ratePost()"
+        [class.liked]="post.isLiked"
       >
         +{{ post.rating }}
       </button>

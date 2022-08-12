@@ -9,5 +9,5 @@
     >
     </mat-paginator>
   </div>
-  <app-categories [categories]="categories$ | async"></app-categories>
+  <app-categories [categories]="categories$ | async" (selected)="onCategoryChange($event)"></app-categories>
 </div>

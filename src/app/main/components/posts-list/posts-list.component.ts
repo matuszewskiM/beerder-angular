@@ -13,12 +13,8 @@ import { Post } from '../../types/post.interface';
 })
 export class PostsListComponent implements OnInit {
   public constructor(private readonly mainStore: MainStore) {}
-  private mockedCategory: Category = {
-    id: 1,
-    name: 'kategoria',
-  };
 
-  public filters = { page: 1, pageSize: 10 };
+  public filters: {page: number; pageSize: number; categoryId?: number} = { page: 1, pageSize: 10 };
 
   public filtersChanged(event: PageEvent): void {
     this.filters = { page: event.pageIndex + 1, pageSize: event.pageSize };
@@ -28,16 +24,26 @@ export class PostsListComponent implements OnInit {
     this.getPostsList();
   }
 
-  public categories$ = of(Array(10).fill(this.mockedCategory));
+  public onCategoryChange(id: number) {
+    this.filters = {...this.filters, categoryId: id}
+    this.getPostsList()
+  }
+
+  public categories$ = this.mainStore.categories$;
 
   public posts$ = this.mainStore.postsList$;
   public results$ = this.mainStore.results$;
 
   public ngOnInit(): void {
     this.getPostsList();
+    this.getCategoryList()
   }
 
   private getPostsList(): void {
     this.mainStore.getPostsList(this.filters);
+  }
+
+  private getCategoryList(): void {
+    this.mainStore.getCategories('trigger')
   }
 }

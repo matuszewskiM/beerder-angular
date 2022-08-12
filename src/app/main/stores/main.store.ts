@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { PostService } from '../services/post.service';
 import { ToastrService } from 'ngx-toastr';
 import { Category } from '../types/category.interface';
+import { environment } from 'src/environments/environment';
+import { Comment } from '../types/comment.interface';
 
 export interface MainState {
   postsList: Post[];
@@ -41,12 +43,12 @@ export class MainStore extends ComponentStore<MainState> {
 
   private readonly setPost = this.updater((state, post: Post) => ({
     ...state,
-    post,
+    post: {...post, imagePath: `${environment.apiUrl}/${post.imagePath}`},
   }));
 
   private readonly setPostsList = this.updater((state, postsList: Post[]) => ({
     ...state,
-    postsList,
+    postsList: postsList.map(post => ({...post, imagePath: `${environment.apiUrl}/${post.imagePath}`})),
   }));
 
   private readonly setResults = this.updater((state, results: number) => ({
@@ -63,7 +65,7 @@ export class MainStore extends ComponentStore<MainState> {
 
   private refreshPostRating = this.updater((state, newPost: Post) =>
     state.post
-      ? { ...state, post: newPost }
+      ? { ...state, post: {...newPost, imagePath: `${environment.apiUrl}/${newPost.imagePath}`} }
       : {
           ...state,
           postsList: [...state.postsList].map((post) =>
@@ -71,6 +73,12 @@ export class MainStore extends ComponentStore<MainState> {
           ),
         }
   );
+
+  private refreshCommentRating = this.updater((state, newComment: Comment) => 
+  ({...state, 
+    post: 
+      {...state.post!, 
+        comments: state.post?.comments?.map(prev => prev.id ===newComment.id ? newComment : prev)}}));
 
   public readonly getPost = this.effect((id$: Observable<number>) => {
     return id$.pipe(
@@ -141,6 +149,29 @@ export class MainStore extends ComponentStore<MainState> {
     }
   );
 
+  public readonly createPost = this.effect(
+    (payload$: Observable<{ data: FormData, onSuccess?: () => void }>) => {
+      return payload$.pipe(
+        switchMap(({ data, onSuccess }) =>
+          this.postService.createPost(data).pipe(
+            tap({
+              next: (post) => {
+                if (onSuccess) {
+                  onSuccess()
+                }
+              },
+              error: () => this.toastr.error('Error'),
+            }),
+            catchError(() => {
+              this.toastr.error('Error');
+              return of();
+            })
+          )
+        )
+      );
+    }
+  );
+
   public readonly ratePost = this.effect((id$: Observable<number>) => {
     return id$.pipe(
       switchMap((id) =>
@@ -149,6 +180,26 @@ export class MainStore extends ComponentStore<MainState> {
             next: (post) => {
               console.log(post);
               this.refreshPostRating(post);
+            },
+            error: () => this.toastr.error('Errpr'),
+          }),
+          catchError(() => {
+            this.toastr.error('Error');
+            return of();
+          })
+        )
+      )
+    );
+  });
+
+  public readonly rateComment = this.effect((id$: Observable<number>) => {
+    return id$.pipe(
+      switchMap((id) =>
+        this.postService.rateComment(id).pipe(
+          tap({
+            next: (comment) => {
+              console.log(comment);
+              this.refreshCommentRating(comment);
             },
             error: () => this.toastr.error('Errpr'),
           }),

@@ -1,11 +1,11 @@
 <div class="register-container">
-  <h1 class="header">Utwórz konto</h1>
+  <h1 class="header">Utwórz post</h1>
   <form class="register-form" [formGroup]="postForm">
     <mat-form-field appearance="fill">
-      <mat-label>Nickname</mat-label>
-      <input matInput placeholder="nickname" formControlName="nickname" />
+      <mat-label>title</mat-label>
+      <input matInput placeholder="nickname" formControlName="title" />
       <mat-error *ngIf="!isTitleValid"
-        >Nickname musi zawierać 8-16 liter lub cyfr</mat-error
+        >tytul musi zawierać 8-16 liter lub cyfr</mat-error
       >
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -56,8 +56,8 @@
         </table>
       </div>
     </div>
-    <button class="register-button" mat-button [disabled]="postForm.invalid">
-      Zarejestruj się
+    <button class="register-button" mat-button [disabled]="postForm.invalid" (click)="onSubmit()">
+      utwórz post
     </button>
   </form>
   <!-- <div class="register-redirect">

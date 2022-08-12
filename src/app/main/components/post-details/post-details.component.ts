@@ -19,7 +19,7 @@ export class PostDetailsComponent implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id')!);
   }
 
-  public commentBodyControl = new FormControl('', Validators.required);
+  public commentBodyControl = new FormControl('');
 
   public post$ = this.mainStore.post$;
   public isLoggedIn$ = this.userStore.isLoggedIn$;
@@ -31,7 +31,15 @@ export class PostDetailsComponent implements OnInit {
 
   public onSubmit(): void {
     const body = this.commentBodyControl.value!;
-    this.mainStore.createComment({ postId: this.id, body });
+    if (body.length) {
+      this.mainStore.createComment({ postId: this.id, body });
+      this.commentBodyControl.setValue('')
+    }
+    
+  }
+
+  rateComment(id: number): void {
+    this.mainStore.rateComment(id)
   }
 
   private getPost(): void {

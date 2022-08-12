@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Category } from '../types/category.interface';
+import { Comment } from '../types/comment.interface';
 import { Post } from '../types/post.interface';
 
 @Injectable()
@@ -28,15 +29,20 @@ export class PostService {
     const endpointUrl =
       `${this.apiUrl}/posts?page=${page}&pageSize=${pageSize}` +
       categoryIdParam;
-    return this.httpClient.get<{ posts: Post[]; results: number }>(endpointUrl);
+    return this.httpClient.get<{ posts: Post[]; results: number }>(endpointUrl, this.prepareSettings());
   }
 
   public fetchPost(id: number): Observable<Post> {
     const endpointUrl = `${this.apiUrl}/posts/${id}`;
-    return this.httpClient.get<Post>(endpointUrl);
+    return this.httpClient.get<Post>(endpointUrl, this.prepareSettings());
   }
 
   public ratePost(id: number): Observable<Post> {
+    const endpointUrl = `${this.apiUrl}/posts/rate/${id}`;
+    return this.httpClient.post<Post>(endpointUrl, {}, this.prepareSettings());
+  }
+
+  public downratePost(id: number): Observable<Post> {
     const endpointUrl = `${this.apiUrl}/posts/rate/${id}`;
     return this.httpClient.post<Post>(endpointUrl, {}, this.prepareSettings());
   }
@@ -55,6 +61,15 @@ export class PostService {
     return this.httpClient.post<Post>(
       endpointUrl,
       { body },
+      this.prepareSettings()
+    );
+  }
+
+  public createPost(data: FormData): Observable<Post> {
+    const endpointUrl = `${this.apiUrl}/posts/create`;
+    return this.httpClient.post<Post>(
+      endpointUrl,
+      data,
       this.prepareSettings()
     );
   }

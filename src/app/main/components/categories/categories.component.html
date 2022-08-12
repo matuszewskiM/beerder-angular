@@ -1,5 +1,5 @@
 <mat-card>
-  <div class="category" *ngFor="let category of categories">
+  <div class="category" *ngFor="let category of categories" (click)="onSelected(category.id)">
     #{{ category.name }}
   </div>
 </mat-card>

@@ -10,6 +10,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { MainStore } from '../../stores/main.store';
 import { Category } from '../../types/category.interface';
+
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
@@ -36,6 +37,10 @@ export class PostFormComponent implements OnInit {
     private readonly userStore: UserStore,
     private readonly mainStore: MainStore
   ) {}
+
+  public onSubmit(): void {
+    this.mainStore.createPost({data: this.preparePayload()})
+  }
 
   public getIsFormValid(): boolean {
     return (
@@ -122,12 +127,12 @@ export class PostFormComponent implements OnInit {
   public preparePayload(): FormData {
     const formData = new FormData();
     formData.append('title', this.postForm.get('title')!.value!);
+    formData.append('image', this.file!)
     const categories = this.postForm
       .get('categories')!
-      .value!.forEach((category: Category) =>
-        formData.append('categoryIds', `${category.id}`)
-      );
-    //formData.append('categoryIds', categories);
+      .value!
+      categories.forEach(category => formData.append('categoryIds', `${category}`))
+      console.log(this.file)
     return formData;
   }
 }
