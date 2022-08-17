@@ -23,11 +23,12 @@ export class PostService {
   public fetchPostsList(
     page: number,
     pageSize: number,
-    categoryId?: number
+    sorting: string,
+    categoryId?: number,
   ): Observable<{ posts: Post[]; results: number }> {
     const categoryIdParam = categoryId ? `&categoryId=${categoryId}` : '';
     const endpointUrl =
-      `${this.apiUrl}/posts?page=${page}&pageSize=${pageSize}` +
+      `${this.apiUrl}/posts?page=${page}&pageSize=${pageSize}&sorting=${sorting}` +
       categoryIdParam;
     return this.httpClient.get<{ posts: Post[]; results: number }>(endpointUrl, this.prepareSettings());
   }

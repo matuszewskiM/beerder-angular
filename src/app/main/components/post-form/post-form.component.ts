@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, SecurityContext } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UserStore } from '../../stores/user.store';
@@ -10,6 +10,8 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { MainStore } from '../../stores/main.store';
 import { Category } from '../../types/category.interface';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-form',
@@ -29,25 +31,36 @@ export class PostFormComponent implements OnInit {
 
   public categories$ = this.mainStore.categories$;
 
+  public isFetching$ = this.mainStore.isFetchingPostCreate$
+
   public file: File | null = null;
 
   public constructor(
     private readonly toastr: ToastrService,
     private readonly matDialog: MatDialog,
     private readonly userStore: UserStore,
-    private readonly mainStore: MainStore
+    private readonly mainStore: MainStore, 
+    private readonly domSanitizer: DomSanitizer,
   ) {}
 
   public onSubmit(): void {
-    this.mainStore.createPost({data: this.preparePayload()})
+    this.mainStore.createPost({data: this.preparePayload(), onSuccess: () => this.matDialog.closeAll()})
   }
 
-  public getIsFormValid(): boolean {
+  public get isFormValid(): boolean {
     return (
       this.isTitleValid &&
-      this.selectedCategories?.length! > 0 &&
+      this.selectedCategories?.length! >= 2 &&
       this.file !== null
     );
+  }
+
+  public get imageSrc() {
+    if (this.file) {
+      return this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(this.file))
+    }
+
+    return null
   }
 
   public get isTitleValid(): boolean {
@@ -91,6 +104,10 @@ export class PostFormComponent implements OnInit {
       // const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
       // console.log(droppedFile.relativePath, fileEntry);
     }
+  }
+
+  public onFileRemove(): void {
+    this.file = null
   }
 
   private isFileAllowed(fileName: string) {

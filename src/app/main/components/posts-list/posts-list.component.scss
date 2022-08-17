@@ -8,13 +8,18 @@
   background-color: darken(white, 10%);
 
   .list-wrapper {
-    margin-top: 50px;
+    margin-top: 70px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
     overflow: scroll;
   }
+
+  .mat-paginator {
+    background-color: darken(white, 10%);;
+  }
+
   app-categories {
     margin-top: 50px;
   }

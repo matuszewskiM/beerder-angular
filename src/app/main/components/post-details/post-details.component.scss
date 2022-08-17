@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
+  padding-top: 100px;
 
   .form-field-card {
     width: 500px;
@@ -49,13 +50,22 @@
         justify-content: space-between;
       }
 
-      .upvote-btn {
-        background-color: green;
-        color: white;
-        width: fit-content;
+        .upvote-btn {
+          background-color: #006dd1;
+          color: white;
+          width: fit-content;
         margin-right: 0px;
         margin-left: auto;
-      }
+  
+          &:hover {
+            opacity: 0.75;
+          }
+  
+          &.liked {
+            background-color: green !important;
+          }
+        }
+      
     }
   }
 }

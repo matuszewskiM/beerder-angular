@@ -32,6 +32,7 @@ export class PostComponent {
   }
 
   public ratePost(): void {
+    console.log(this.post)
     this.mainStore.ratePost(this.post.id);
   }
 }

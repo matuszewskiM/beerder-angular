@@ -28,6 +28,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PostDialogComponent } from './components/dialogs/post-dialog/post-dialog.component';
 import { PostFormComponent } from './components/post-form/post-form.component';
 import { MatSelectModule } from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { DateLocalePipe } from '../shared/pipes/date-locale.pipe';
+
 
 @NgModule({
   declarations: [
@@ -65,6 +68,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     NgxFileDropModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
+    DateLocalePipe,
   ],
   providers: [PostService],
 })

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { map } from 'rxjs';
 import { PostDialogComponent } from '../components/dialogs/post-dialog/post-dialog.component';
 import { PostFormComponent } from '../components/post-form/post-form.component';
 import { UserStore } from '../stores/user.store';
@@ -15,6 +16,8 @@ export class MainComponent implements OnInit {
     private readonly userStore: UserStore,
     private readonly matDialog: MatDialog
   ) {}
+
+  public isLoggedIn$ =this.userStore.currentUser$.pipe(map(user => Boolean(user)))
 
   ngOnInit(): void {
     this.userStore.getCurrentUserInfo('trigger');

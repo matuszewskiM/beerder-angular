@@ -14,5 +14,5 @@ export interface Post {
   rating: number;
   categories: Category[];
   comments?: Comment[];
-  isLiked: boolean
+  isLiked: any;
 }

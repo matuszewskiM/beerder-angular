@@ -1,8 +1,8 @@
 <div class="top-bar">
   <nav class="nav">
-    <button mat-button routerLink="/posts">TOP 24H</button>
-    <button mat-button routerLink="/posts">Najlepiej oceniane</button>
-    <button mat-button routerLink="/posts">Najnowsze</button>
+    <button mat-button routerLink="/posts" [queryParams]="{sorting: 'top'}" >Najlepiej oceniane</button>
+    <button mat-button routerLink="/posts" [queryParams]="{sorting: 'newest'}">Strona główna</button>
+    <button mat-button routerLink="/posts" [queryParams]="{sorting: 'daily'}">Ostatnie 24h</button>
   </nav>
   <ng-template #actions>
     <button mat-button (click)="openLoginDialog()">login</button>

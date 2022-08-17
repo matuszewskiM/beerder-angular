@@ -1,5 +1,5 @@
 <app-nav-bar></app-nav-bar>
 <router-outlet></router-outlet>
-<button mat-button class="add-post-btn" (click)="openPostFormDialog()">
+<button *ngIf="isLoggedIn$ | async" mat-button class="add-post-btn" (click)="openPostFormDialog()">
   Dodaj post
 </button>

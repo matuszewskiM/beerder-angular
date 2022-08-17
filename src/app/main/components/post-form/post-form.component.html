@@ -1,15 +1,17 @@
 <div class="register-container">
-  <h1 class="header">Utwórz post</h1>
+  <mat-spinner *ngIf="isFetching$ | async; else form"></mat-spinner>
+  <ng-template #form>
+    <h1 class="header">Utwórz post</h1>
   <form class="register-form" [formGroup]="postForm">
     <mat-form-field appearance="fill">
-      <mat-label>title</mat-label>
+      <mat-label>Tytul</mat-label>
       <input matInput placeholder="nickname" formControlName="title" />
       <mat-error *ngIf="!isTitleValid"
-        >tytul musi zawierać 8-16 liter lub cyfr</mat-error
+        >Tytul musi zawierać 8-16 liter lub cyfr</mat-error
       >
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Toppings</mat-label>
+      <mat-label>Kategorie</mat-label>
       <mat-select
         [value]="selectedCategories"
         (selectionChange)="setSelectedCategories($event.value)"
@@ -24,42 +26,32 @@
     </mat-form-field>
     <div class="center">
       <ngx-file-drop
-        dropZoneLabel="Drop files here"
         (onFileDrop)="dropped($event)"
-        (onFileOver)="fileOver($event)"
-        (onFileLeave)="fileLeave($event)"
+        *ngIf="!file; else uploadedFile"
       >
         <ng-template
           ngx-file-drop-content-tmp
           let-openFileSelector="openFileSelector"
         >
-          Optional custom content that replaces the the entire default content.
-          <button type="button" (click)="openFileSelector()">
-            Browse Files
+          Przeciągnij plik tutaj lub wybierz z listy
+          <button mat-button type="button" (click)="openFileSelector()">
+            Przeglądaj pliki
           </button>
         </ng-template>
       </ngx-file-drop>
-      <div class="upload-table">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody class="upload-name-style">
-            <tr *ngIf="file">
-              <td>
-                <strong>{{ file?.name }}</strong>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ng-template #uploadedFile>
+        <div class="upload-table">
+          <img class="uploaded-image" [src]="imageSrc" />
+          <button mat-button (click)="onFileRemove()">Usuń obraz</button>
+        </div>
+      </ng-template>
     </div>
-    <button class="register-button" mat-button [disabled]="postForm.invalid" (click)="onSubmit()">
+    <button class="register-button" mat-button [disabled]="!isFormValid" (click)="onSubmit()">
       utwórz post
     </button>
   </form>
+  </ng-template>
+  
   <!-- <div class="register-redirect">
     <span>Masz już konto?</span><span class="anchor">Zaloguj się!</span>
   </div> -->

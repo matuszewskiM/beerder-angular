@@ -4,7 +4,7 @@
       <span class="title" (click)="navigateToPost()"> {{ post.title }} </span>
       <div class="creation-details">
         <span class="author">{{ post.author.nickname }}</span>
-        <span class="date">{{ post.date }}</span>
+        <span class="date">{{ post.date | dateLocale }}</span>
       </div>
     </div>
     <div>
